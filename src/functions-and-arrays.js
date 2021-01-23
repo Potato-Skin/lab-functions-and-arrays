@@ -30,18 +30,45 @@ const words = [
 // word ->
 
 function findLongestWord(arrayOfWords) {
+  // let longestWord = "";
+
+  // for (let word of arrayOfWords) {
+  //   if (word.length > longestWord.length) {
+  //     longestWord = word;
+  //   }
+  // }
+
+  // return longestWord;
   if (arrayOfWords.length === 0) {
     return null;
   }
-  let longestWord = "";
-
-  for (let word of arrayOfWords) {
-    if (word.length > longestWord.length) {
-      longestWord = word;
+  return arrayOfWords.reduce(function (acc, val) {
+    if (val.length > acc.length) {
+      return val;
     }
-  }
-
-  return longestWord;
+    return acc;
+  }, "");
+  // 1st version of the loop:
+  //  accumulator ("")
+  // val (mistery)
+  // mistery
+  // 2nd loop
+  // acc (mistery)
+  // val (brother)
+  // mistery
+  // 3rd loop
+  // acc (mistery)
+  // val (aviator)
+  /* 
+   const words = [
+  "mystery",
+  "brother",
+  "aviator",
+  "crocodile",
+  "pearl",
+  "orchard",
+  "crackpot",
+]; */
 }
 
 // Iteration #3: Calculate the sum
@@ -49,19 +76,56 @@ function findLongestWord(arrayOfWords) {
 const numbers = [6, 12, 1, 18, 13, 16, 2, 1, 8, 10];
 
 function sumNumbers(arrayOfNumbers) {
-  let sum = 0;
+  // let sum = 0;
 
   // for (let number of arrayOfNumbers) {
   //   sum += number;
   // }
-  for (let i = 0; i < arrayOfNumbers.length; i++) {
-    sum += arrayOfNumbers[i];
-  }
+  // for (let i = 0; i < arrayOfNumbers.length; i++) {
+  //   sum += arrayOfNumbers[i];
+  // }
 
-  return sum;
+  // return sum;
+  return arrayOfNumbers.reduce(function (acc, val) {
+    return acc + val;
+  }, 0);
+
+  // 1st loop
+  // acc (0)
+  // val (6)
+  // return 6 + 0
+  // 2nd loop
+  // acc (6)
+  // val (12)
+  // return 6+12
+  // 3rd loop
+  // acc (18)
+  // val (1)
+  // returns 18 +1
+  // 4th loop
+  // acc (19)
+  // val (18)
+  // returns 18 + 19
+  /* 
+const numbers = [6, 12, 1, 18, 13, 16, 2, 1, 8, 10];
+   */
 }
 
 function sum(arrayOfSomething) {
+  return arrayOfSomething.reduce(function (acc, val) {
+    if (typeof val === "boolean") {
+      return acc + Number(val);
+    }
+    if (typeof val === "number") {
+      return acc + val;
+    }
+    if (typeof val === "string") {
+      return acc + val.length;
+    }
+    if (typeof val === "object") {
+      throw new Error("Unsupported data type sir or ma'am");
+    }
+  }, 0);
   let sum = 0;
   for (let value of arrayOfSomething) {
     switch (typeof value) {
@@ -163,22 +227,122 @@ const wordsUnique = [
 ];
 
 function uniquifyArray(array) {
+  // if (!array.length) {
+  //   return null;
+  // }
+  // const uniqueArray = [];
+
+  // for (let word of array) {
+  //   console.log("current word: ", word);
+  //   console.log("current state of the uniqueArray", uniqueArray);
+  //   if (uniqueArray.indexOf(word) < 0) {
+  //     console.log("UNIQUE WORD IN ARRAY AT THIS STEP: ", word);
+  //     uniqueArray.push(word);
+  //   }
+  // }
+
+  // console.log("final Value of unique Arrray: ", uniqueArray);
+  // return uniqueArray;
   if (!array.length) {
     return null;
   }
-  const uniqueArray = [];
 
-  for (let word of array) {
-    console.log("current word: ", word);
-    console.log("current state of the uniqueArray", uniqueArray);
-    if (uniqueArray.indexOf(word) < 0) {
-      console.log("UNIQUE WORD IN ARRAY AT THIS STEP: ", word);
-      uniqueArray.push(word);
+  // FILTER
+  return array.filter(function (word, idx) {
+    return array.indexOf(word) === idx;
+  });
+
+  // 1st loop:
+  // array.indexOf("crab") => 0
+  // idx => 0
+  // true
+  // it decided to keep the "crab"
+  // 2nd loop:
+  // array.indexOf("poison") => 1
+  // idx => 1
+  // true
+  // it decided to also keep this "poison"
+  // 3rd loop
+  // array.indexOf("crab") => 0
+  // idx => 2
+  // false
+  // it decided NOT to keep this "crab"
+
+  /* 
+  const wordsUnique = [
+  "crab",
+  "poison",
+  "crab",
+  "contagious",
+  "contagious",
+  "simple",
+  "crab",
+  "bring",
+  "sharp",
+  "playground",
+  "poison",
+  "communion",
+  "simple",
+  "bring",
+];
+
+   */
+
+  // REDUCE FASHION
+  return array.reduce(function (acc, val) {
+    if (acc.indexOf(val) < 0) {
+      const arr = acc;
+      arr.push(val);
+      return arr;
     }
-  }
+    return acc;
+  }, []);
 
-  console.log("final Value of unique Arrray: ", uniqueArray);
-  return uniqueArray;
+  // 1st loop
+  // acc ([])
+  // val (crab)
+  // [].indexOf("crab") => negative (indexOf returns the index of the element in an array. if its not there, gives negative number)
+  // ["crab"]
+  // 2nd loop
+  // acc (["crab"])
+  // val ("poison")
+  // ["crab"].indexOf("poison") => negative
+  // returns ["crab", "poison"]
+  // 3rd loop
+  // acc (["crab", "poison"])
+  // val ("crab")
+  // ["crab", "poison"].indexOf("crab") >= 0
+  // returns ["crab", "poison"]
+
+  /* 
+  const wordsUnique = [
+  "crab",
+  "poison",
+  "crab",
+  "contagious",
+  "contagious",
+  "simple",
+  "crab",
+  "bring",
+  "sharp",
+  "playground",
+  "poison",
+  "communion",
+  "simple",
+  "bring",
+];
+
+   */
+
+  //  OVER ENGINEERED DUMB SOLUTION
+
+  return array
+    .map(function (element, index) {
+      return array.indexOf(element) === index;
+    })
+    .filter(function (booleans) {
+      return booleans === true;
+    });
 }
 
 console.log("EXAMPLE OF UNIQUIFY: ", uniquifyArray(wordsUnique));
@@ -199,15 +363,27 @@ function doesWordExist(arrayOfWords, word) {
   if (!arrayOfWords.length) {
     return null;
   }
-  // return arrayOfWords.includes(word);
-  for (let eachIndividualWord of arrayOfWords) {
-    if (eachIndividualWord === word) {
-      // exists = true;
-      return true;
-    }
-  }
 
-  return false;
+  // const exists = arrayOfWords.find(function (element) {
+  //   return element === word;
+  // });
+
+  // if (!exists) {
+  //   return false;
+  // }
+
+  // return true;
+
+  return arrayOfWords.includes(word);
+  // return arrayOfWords.includes(word);
+  // for (let eachIndividualWord of arrayOfWords) {
+  //   if (eachIndividualWord === word) {
+  //     // exists = true;
+  //     return true;
+  //   }
+  // }
+
+  // return false;
 }
 
 // Iteration #7: Count repetition
@@ -228,11 +404,16 @@ const wordsCount = [
 function howManyTimes(arrayOfWords, word) {
   let numberOfTimes = 0;
 
-  for (let individual of arrayOfWords) {
+  arrayOfWords.forEach(function (individual) {
     if (individual === word) {
       numberOfTimes++;
     }
-  }
+  });
+  // for (let individual of arrayOfWords) {
+  //   if (individual === word) {
+  //     numberOfTimes++;
+  //   }
+  // }
   return numberOfTimes;
 }
 
